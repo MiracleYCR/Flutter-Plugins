@@ -1,16 +1,20 @@
 part of pagoda_router;
 
-typedef Future<bool> RouteInterceptor(BuildContext context);
-typedef WidgetBuilder RouteBuilder({Map? args});
+typedef WidgetBuilder RouteBuilder({Map? params});
 
-class PagodaRouteInfo {
+// 路由信息
+class PagodaRoute {
   final String path;
   final String name;
-  final WidgetBuilder? builder;
+  final RouteBuilder? builder;
+  PagodaRoute({required this.path, required this.name, this.builder});
+}
 
-  final RouteBuilder? builder2;
+class PagodaRouteParserInfo {
+  final String path;
+  final String name;
+  final Map? params;
+  final Object? state;
 
-  final List<RouteInterceptor>? interceptors;
-
-  PagodaRouteInfo({required this.path, required this.name, this.builder, this.builder2, this.interceptors});
+  PagodaRouteParserInfo({required this.path, required this.name, this.params, this.state});
 }

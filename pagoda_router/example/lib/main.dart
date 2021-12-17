@@ -21,36 +21,30 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
 
-  PagodaRouter pagodaRouter = PagodaRouter(
+    PagodaRouter pagodaRouter = PagodaRouter(
       registerRoutes: [
-        PagodaRouteInfo(
+        PagodaRoute(
+          path: '/',
+          name: 'home',
+          builder: ({Map? params}) {
+            return (context) => HomePage();
+          }
+        ),
+        PagodaRoute(
           path: '/detail',
           name: 'detail',
-          builder2: ({Map? args}) {
-            return (context) => DetailPage(msg: args?['msg']);
+          builder: ({Map? params}) {
+            return (context) => DetailPage(msg: params?['msg']);
           }
-
         ),
-
-        PagodaRouteInfo(
-          path: '/',
-          name: 'root',
-          builder: (context) => HomePage(onJumpToUser: (String str) {
-            PagodaRouter.pagodaNavigator.navigateTo('detail', args: {'msg': '66666666'});
-          }),
-        ),
-        PagodaRouteInfo(
+        PagodaRoute(
           path: '/user',
           name: 'user',
-          builder: (context) => UserPage(vid: '123123')
+          builder: ({Map? params}) {
+            return (context) => UserPage(vid: params?['vid']);
+          }
         ),
-      ],
-
-      // initialRoute: PagodaRouteInfo(
-      //   path: '/initial',
-      //   builder: (context) => InitialPage(),
-      // )
-
+      ]
     );
 
     return MaterialApp.router(

@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:pagoda_router/pagoda_router.dart';
 
 class HomePage extends StatefulWidget {
-  final ValueChanged<String> onJumpToUser;
-
-  HomePage({Key? key, required this.onJumpToUser}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  var listener;
+
+  @override
+  void initState() {
+    super.initState();
+    PagodaRouter.pagodaNavigator.addListener(this.listener = (cur, prev) {
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,11 +31,17 @@ class _HomePageState extends State<HomePage> {
               child: Text('我的'),
               onPressed: () {
                 print('hhhhhh');
-                widget.onJumpToUser('123');
+                PagodaRouter.pagodaNavigator.navigateTo('user', params: {'vid': '6666'});
               })
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    PagodaRouter.pagodaNavigator.removeListener(this.listener);
   }
 }

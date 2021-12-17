@@ -1,28 +1,23 @@
 part of pagoda_router;
 
-class PagodaRouteInformationParser extends RouteInformationParser<PagodaRouteInfo> {
+class PagodaRouteInformationParser extends RouteInformationParser<PagodaRouteParserInfo> {
 
-  final List<PagodaRouteInfo> registerRoutes;
-
-  PagodaRouteInformationParser({required this.registerRoutes});
-
-
+  // 解析路由
   @override
-  Future<PagodaRouteInfo> parseRouteInformation(RouteInformation routeInformation) async {
-    String path = routeInformation.location ?? '/';
-    Object? body = routeInformation.state;
+  Future<PagodaRouteParserInfo> parseRouteInformation(RouteInformation routeInformation) async {
+    print('parseRouteInformation ----> location: ${routeInformation.location} state: ${routeInformation.state}');
 
-    // 该路由是否已注册
-    bool hasRegister = registerRoutes.where((route) => route.path == path).toList().isNotEmpty;
-    
+    String _location = routeInformation.location ?? '/';
+    Object? _state = routeInformation.state;
 
-    // 没有注册返回 404 路由
-    if (!hasRegister) {
-      return PagodaRouteInfo(path: '/404', name: '404');
+    final uri = Uri.parse(_location);
+
+    print(uri.pathSegments);
+
+    if (uri.pathSegments.isEmpty) {
+      return PagodaRouteParserInfo(path: _location, name: 'home', params: null, state: _state);
     }
 
-    
-    print('PagodaRouteInformationParser ------> ${routeInformation.location}');
-    return PagodaRouteInfo(path: '/', name: 'root');
+    return PagodaRouteParserInfo(path: _location, name: uri.pathSegments[0], params: null, state: _state);
   }
 }

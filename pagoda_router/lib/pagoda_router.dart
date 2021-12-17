@@ -15,19 +15,21 @@ part 'common/error_page.dart';
 
 class PagodaRouter {
   // 初始路由信息
-  final PagodaRouteInfo? initialRoute;
+  final PagodaRoute? initialRoute;
+  
+  // 注册路由数据
+  final List<PagodaRoute> registerRoutes;
+
   // 报错的路由页面显示
   final ErrorPage? errorRoutePage;
-  // 注册路由数据
-  final List<PagodaRouteInfo> registerRoutes;
-
-
+  
+  // 路由导航器
   static final pagodaNavigator = PagodaNavigator.getInstance();
 
-  // 路由导航控制器
-  // PagodaNavigator _pagodaNavigator = PagodaNavigator.getInstance();
-
+  // 路由代理器
   late PagodaRouterDelegate _delegate;
+
+  // 路由解析器
   late PagodaRouteInformationParser _routeInformationParser;
 
   PagodaRouter({
@@ -44,9 +46,7 @@ class PagodaRouter {
       pagodaNavigator: pagodaNavigator
     );
 
-    _routeInformationParser = PagodaRouteInformationParser(
-      registerRoutes: registerRoutes
-    );
+    _routeInformationParser = PagodaRouteInformationParser();
   }
 
   // 路由代理
@@ -59,6 +59,4 @@ class PagodaRouter {
     return _routeInformationParser;
   }
 
-
-  
 }
