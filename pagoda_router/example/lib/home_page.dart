@@ -27,12 +27,21 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             Text('首页'),
-            MaterialButton(
+            ElevatedButton(
               child: Text('我的'),
               onPressed: () {
-                print('hhhhhh');
-                PagodaRouter.pagodaNavigator.navigateTo('user', params: {'vid': '6666'});
-              })
+                PagodaRouter.pagodaNavigator.navigateTo('user', params: {'vid': '我的 id 是 666'});
+            }),
+            ElevatedButton(
+              child: Text('详情'),
+              onPressed: () {
+                PagodaRouter.pagodaNavigator.navigateTo('detail', params: {'msg': '详情页面'});
+            }),
+            ElevatedButton(
+              child: Text('未知页面'),
+              onPressed: () {
+                PagodaRouter.pagodaNavigator.navigateTo('error');
+            }),
           ],
         ),
       ),
