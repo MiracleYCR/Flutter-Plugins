@@ -39,8 +39,6 @@ class PagodaRouterDelegate extends RouterDelegate<PagodaRouteParserInfo> with Ch
     // 获取当前页面在路由栈中的位置
     int index = pagodaNavigator.getPageIndex(_stack, curRouteInfo);
 
-    print('PagodaRouterDelegate build index ----- ${index}');
-
     // 临时栈
     List<Page<dynamic>> _tempStack = _stack;
 
@@ -48,9 +46,6 @@ class PagodaRouterDelegate extends RouterDelegate<PagodaRouteParserInfo> with Ch
     if (index != -1) {
       _tempStack = _tempStack.sublist(0, index);
     }
-
-    print('PagodaRouterDelegate build _tempStack ----- ${_tempStack}');
-
 
     // 当前页面的 Page
     Page<dynamic> curPage;
@@ -68,8 +63,6 @@ class PagodaRouterDelegate extends RouterDelegate<PagodaRouteParserInfo> with Ch
       }
       curPage = PagodaPage(key: ValueKey(homeRoutInfo.name), name: homeRoutInfo.name, builder: homeRoutInfo.builder!());
 
-      print('PagodaRouterDelegate build homeRoutInfo ----- ${homeRoutInfo}');
-
     } else {
       var pageRouteInfo = registerRoutes.where((route) => route.name == curRouteInfo.name).toList();
       
@@ -80,34 +73,11 @@ class PagodaRouterDelegate extends RouterDelegate<PagodaRouteParserInfo> with Ch
       }
     }
 
-    
-    // if (curRouteInfo.path == '/') {
-    //   _stack.clear();
-    //   // 未设置初始页面，且路径为 / 的，跳转至注册路由中的 / 页面
-    //   // 设置初始页面的时候则取初始页面
-    //   var _rootPageInfo = initialRoute ?? registerRoutes.where((route) => route.path == '/').toList()[0];
-
-    //   curPage = PagodaPage(key: ValueKey(_rootPageInfo.path), name: _rootPageInfo.name, builder: _rootPageInfo.builder!());
-
-
-    // } else if (curRouteInfo.path == '/404') {
-
-    //   print('curRoutePath == /404');
-    //   curPage = PagodaPage(key: const ValueKey('/404'), name: '404', builder: (context) => errorPage);
-
-    // } else {
-    //   var _curPageInfo = registerRoutes.where((route) => route.path == curRouteInfo.path).toList()[0];
-    //   print('-------------------');
-
-    //   // curPage = PagodaPage(key: ValueKey(_curPageInfo.path), name: _curPageInfo.name, builder: _curPageInfo.builder!);
-
-    //   // curPage = PagodaPage(key: ValueKey(_curPageInfo.path), name: _curPageInfo.name, builder: _curPageInfo.builder!(args: curRouteInfo.args));
-    // }
-    
-
     _tempStack = [..._tempStack, curPage];
 
-    // pagodaNavigator.notifyRouteChange(_tempStack, _stack);
+    print('_tempStack  ${_tempStack}  _stack  ${_stack}');
+
+    pagodaNavigator.notifyRouteChange(_tempStack, _stack);
 
     _stack = _tempStack;
 
@@ -117,8 +87,14 @@ class PagodaRouterDelegate extends RouterDelegate<PagodaRouteParserInfo> with Ch
         key: navigatorKey,
         pages: _stack,
         onPopPage: (route, result) {
-          print(route);
-          return route.didPop(result);
+          print('onPopPage ${route} ${result}');
+          if (!route.didPop(result)) {
+            return false;
+          }
+          var _tempStack = [..._stack];
+          _stack.removeLast();
+          pagodaNavigator.notifyRouteChange(_tempStack, _stack);
+          return true;
         },
       )
     );

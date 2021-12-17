@@ -46,9 +46,9 @@ class PagodaNavigator extends _RouteNavigatorListener {
 
   void _notifyRouteChange (Page<dynamic> current) {
     print('pagoda_navigator：current: ${current.name}');
-    print('pagoda_navigator：prev: ${_currentPage.name}');
+    // print('pagoda_navigator：prev: ${_currentPage.name!}');
     _listeners.forEach((listener) {
-      listener(current.name!, _currentPage.name);
+      listener(current.name!, 'home');
       _currentPage = current;
     });
   }
